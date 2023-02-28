@@ -24,6 +24,21 @@ class BookController {
         $this->bookServicio = new BookServicio();
     }
 
+    public function remove($id = null) {
+        $this->view = self::VIEW_FOLDER . DIRECTORY_SEPARATOR . 'list_book';
+        $this->page_title = "Listado de libros";
+        $publishers = $this->bookServicio->getPublishers();
+        $authors = $this->bookServicio->getAuthors();
+        if (isset($_GET["id"])) {
+            $id = $_GET["id"];
+            $book = $this->bookServicio->getBookById($id);
+            $book->setAll_publishers($publishers);
+            $book->setAll_authors($authors);
+            $this->bookServicio->removeBook($book);
+            header("list_book");
+        }
+    }
+
     public function edit($id = null) {
         $this->page_title = 'Editar libro';
         $this->view = self::VIEW_FOLDER . DIRECTORY_SEPARATOR . 'edit_book';
@@ -74,17 +89,6 @@ class BookController {
             $book->setIsbn($isbn);
             $book->setPublished_date($pdate);
             $book->setPublisher_id($pub_Id);
-//Si fuese una relación POO de Book y array de Author
-//            if (isset($_POST["$authors"]) && count($_POST["$authors"]) > 0) {
-//                $authors = $_POST["$authors"];
-//                $array_authors = array();
-//                foreach ($authors as $author_id):
-//                    $author = new Author();
-//                    $author->setAuthor_id($author_id);
-//                    array_push($array_authors, $author);
-//                endforeach;
-//                $book->setAutores($array_authors);
-//            }
 
             $exito = $this->bookServicio->editBook($book, $_POST["authors"]);
             if ($exito) {

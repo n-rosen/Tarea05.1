@@ -124,7 +124,7 @@ class BookServicio {
         }
     }
 
-    public function editBook(Book $book, $authors) {
+    public function editBook(Book $book) {
         $exito = true;
         try {
             $this->book_repository->beginTransaction();
@@ -138,6 +138,22 @@ class BookServicio {
             $exito = false;
         }
         return ($book != null) && $exito;
+    }
+
+    public function removeBook(Book $book) {
+        $exito = true;
+        try {
+            $this->book_repository->beginTransaction();
+
+            $borrar = $this->book_repository->delete($book);
+
+            $this->book_repository->commit();
+        } catch (Exception $ex) {
+            echo 'Error: ' . $ex->getMessage();
+            $this->book_repository->rollback();
+            $exito = false;
+        }
+        return $exito;
     }
 
 }

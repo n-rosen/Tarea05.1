@@ -197,25 +197,27 @@ class BookRepository extends BaseRepository implements IBookRepository {
         }
     }
 
-    public function delete($id): bool {
+    public function delete($book): bool {
+        $title = $book->getTitle();
+        $isbn = $book->getIsbn();
+        $published_date = ($book->getPublished_date() != null) ? $book->getPublished_date()->format("Y-m-d") : null;
+        $published_id = $book->getPublisher_Id();
+        $book_id = $book->getBook_Id();
+        try {
+            $sentencia = $this->conn->prepare(
+                    "DELETE FROM "
+                    . $this->table_name . " WHERE " . $this->pk_name . " =?");
 
-        $sentencia = $this->conn->prepare(
-                "DELETE FROM " . $this->table_name . " WHERE " . $this->pk_name
-                . " = ?");
+            $sentencia->bind_param("i", $book_id);
 
-        $sentencia->bind_param("i", $id);
+            // $pdostmt->debugDumpParams();
+            $sentencia->execute();
 
-        // $pdostmt->debugDumpParams();
-        $sentencia->execute();
-
-        $resultado = $sentencia->get_result();
-
-        $exito = ($resultado->num_rows === 1);
-
-        $sentencia->close();
-        $resultado->close();
-
-        return $exito;
+            return true;
+        } catch (Exception $ex) {
+            echo 'Error: ' . $ex->getMessage();
+            return false;
+        }
     }
 
     public function read($book_id) {

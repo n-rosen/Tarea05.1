@@ -26,7 +26,7 @@
                         <td><?= $book["isbn"] ?></td>
                         <td><?= $book["published_date"] ?></td>
                         <td><a href="FrontController.php?controller=Book&action=edit&id=<?= $book["book_id"] ?>" class="btn btn-primary">Editar</a>
-                            <a href="FrontController.php?controller=Book&action=confirmDelete&id=<?= $book["book_id"] ?>" class="btn btn-danger">Eliminar</a>
+                            <a href="FrontController.php?controller=Book&action=remove&id=<?= $book["book_id"] ?>" class="btn btn-danger">Eliminar</a>
                         </td>
                     </tr>
                     <?php
