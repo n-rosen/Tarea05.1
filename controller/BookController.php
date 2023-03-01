@@ -25,8 +25,6 @@ class BookController {
     }
 
     public function remove($id = null) {
-        $this->view = self::VIEW_FOLDER . DIRECTORY_SEPARATOR . 'list_book';
-        $this->page_title = "Listado de libros";
         $publishers = $this->bookServicio->getPublishers();
         $authors = $this->bookServicio->getAuthors();
         if (isset($_GET["id"])) {
@@ -35,8 +33,9 @@ class BookController {
             $book->setAll_publishers($publishers);
             $book->setAll_authors($authors);
             $this->bookServicio->removeBook($book);
-            header("list_book");
         }
+        $this->view = self::VIEW_FOLDER . DIRECTORY_SEPARATOR . 'list_book';
+        $this->page_title = "Listado de libros";
     }
 
     public function edit($id = null) {
